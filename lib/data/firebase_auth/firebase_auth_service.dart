@@ -1,12 +1,15 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAuthService {
   final firebaseAuth = FirebaseAuth.instance;
-  // final GoogleSignIn googleSignIn = GoogleSignIn.instance;
-  // final clientId =
-  //     "951221634637-psjou82vbf7lbb49qdj4222bjkbeu0ci.apps.googleusercontent.com";
-  // final serverClientId =
-  //     '951221634637-k06b51tb5cur1spq6a2fsq52hqg2u77a.apps.googleusercontent.com';
+  final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+  final clientId =
+      "883095389786-dihbcd2v6k19f75viqlon955rdovrga9.apps.googleusercontent.com";
+  final serverClientId =
+      "883095389786-9ci1fn1a7fffo1em6tl7b78519ohos4j.apps.googleusercontent.com";
 
   Future<UserCredential> registerWithEmailAndPassword(
     String email,
@@ -28,32 +31,36 @@ class FirebaseAuthService {
     );
   }
 
-  //   Future<UserCredential?> signInWithGoogle() async {
-  //     // Trigger the authentication flow
-  //     unawaited(googleSignIn.initialize(
-  //         clientId: clientId, serverClientId: serverClientId));
+  Future<UserCredential?> signInWithGoogle() async {
+    // Trigger the authentication flow
+    unawaited(
+      googleSignIn.initialize(
+        clientId: clientId,
+        serverClientId: serverClientId,
+      ),
+    );
 
-  //     final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
+    final GoogleSignInAccount googleUser = await googleSignIn.authenticate();
 
-  //     // Obtain the auth details from the request
-  //     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-  //     // Create a new credential
-  //     final OAuthCredential credential = GoogleAuthProvider.credential(
-  //       idToken: googleAuth.idToken,
-  //     );
+    // Create a new credential
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+    );
 
-  //     // Once signed in, return the UserCredential
-  //     return await firebaseAuth.signInWithCredential(credential);
-  //   }
+    // Once signed in, return the UserCredential
+    return await firebaseAuth.signInWithCredential(credential);
+  }
 
-  //   Stream<User?> checkUserSignInState() {
-  //     final state = firebaseAuth.authStateChanges();
-  //     return state;
-  //   }
+  Stream<User?> checkUserSignInState() {
+    final state = firebaseAuth.authStateChanges();
+    return state;
+  }
 
-  //   signOutWithGoogle() {
-  //     googleSignIn.signOut();
-  //     firebaseAuth.signOut();
-  //   }
+  signOutWithGoogle() {
+    googleSignIn.signOut();
+    firebaseAuth.signOut();
+  }
 }

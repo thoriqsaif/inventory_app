@@ -7,6 +7,8 @@ import 'package:inventory_app/navigations/navigations_routes.dart';
 import 'package:inventory_app/screen/add_inventory/add_inventory_screen.dart';
 import 'package:inventory_app/screen/home/inventory_list_screen.dart';
 import 'package:inventory_app/screen/inventory_detail/inventory_detail_screen.dart';
+import 'package:inventory_app/screen/register_screen/register_screen.dart';
+import 'package:inventory_app/screen/signin_screen/signin_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +37,10 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Best Inventory Apps',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: NavigationRoutes.signin.name,
+      initialRoute: NavigationRoutes.detailInventory.name,
       routes: {
-        // NavigationRoutes.signin.name: (context) => SigninScreen(),
-        // NavigationRoutes.register.name: (context) => RegisterScreen(),
+        NavigationRoutes.signin.name: (context) => SignInScreen(),
+        NavigationRoutes.register.name: (context) => RegisterScreen(),
         NavigationRoutes.inventoryPage.name: (context) => InventoryPage(),
         NavigationRoutes.detailInventory.name: (context) => DetailInventoryPage(
           item: ModalRoute.of(context)?.settings.arguments as InventoryItem,

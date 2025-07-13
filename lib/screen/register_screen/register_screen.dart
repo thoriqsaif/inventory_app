@@ -1,31 +1,33 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:inventory_app/controllers/auth_controller/auth_controller.dart';
-import 'package:inventory_app/data/firebase_auth/firebase_auth_service.dart';
-import 'package:inventory_app/navigations/navigations_routes.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController psswdController = TextEditingController();
 
-  AuthController authController = Get.put(
-    AuthController(Get.put(FirebaseAuthService())),
-  );
+  AuthController authController = Get.find();
 
   bool passwordVisible = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: const Text("Inventory Apps"),
+      ),
       body: Center(
         child: SizedBox(
           width: 400,
@@ -38,7 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Row(
                   children: [
                     Text(
-                      'Masuk dah',
+                      'Silahkan Daftar',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
                   ],
@@ -48,7 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   controller: emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    hintText: 'Masukan Email',
+                    hintText: 'Masukkan Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -81,7 +83,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 SizedBox.square(dimension: 16),
                 ElevatedButton(
                   onPressed: () async {
-                    _signInWithEmail();
+                    _register();
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -91,42 +93,20 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text('Masuk'),
-                    ),
-                  ),
-                ),
-                SizedBox.square(dimension: 16),
-                Text('Atau'),
-                SizedBox.square(dimension: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    _signInWithGoogle();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Text('Masuk dengan Google'),
+                      child: Text('Daftar'),
                     ),
                   ),
                 ),
                 SizedBox.square(dimension: 32),
                 Row(
                   children: [
-                    Text('Belum punya akun?'),
+                    Text('Sudah punya akun?'),
                     SizedBox.square(dimension: 4),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          NavigationRoutes.register.name,
-                        );
+                        Navigator.of(context).pop();
                       },
-                      child: Text('Daftar'),
+                      child: Text('Masuk'),
                     ),
                   ],
                 ),
@@ -138,44 +118,25 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Future _signInWithEmail() async {
+  Future _register() async {
     try {
-      final result = await authController.signIn(
+      final result = await authController.register(
         emailController.text,
         psswdController.text,
       );
+      _showSnackbar('Sukses daftar sebagai ${result.user?.email}');
 
       if (mounted) {
-        _showSnackbar('Sukses masuk sebagai ${result.user?.email}');
-        //Navigator.pushNamed(context, NavigationRoutes.movieList.name);
+        Navigator.pop(context);
       }
     } on FirebaseAuthException catch (e) {
-      _showSnackbar('Masuk gagal: ${e.message}');
+      _showSnackbar('Daftar gagal: ${e.message}');
     } catch (e) {
-      _showSnackbar('Masuk gagal');
+      _showSnackbar('Daftar gagal');
     }
 
     emailController.clear();
     psswdController.clear();
-  }
-
-  Future _signInWithGoogle() async {
-    try {
-      final result = await authController.signInWithGoogle();
-
-      if (result != null) {
-        if (mounted) {
-          _showSnackbar('Sukses masuk sebagai ${result.user?.email}');
-          //Navigator.pushNamed(context, NavigationRoutes.movieList.name);
-        }
-      }
-    } on FirebaseAuthException catch (e) {
-      _showSnackbar('Masuk gagal: ${e.message}');
-    } on GoogleSignInException catch (e) {
-      _showSnackbar('Masuk gagal: ${e.description}');
-    } catch (e) {
-      _showSnackbar('Masuk gagal: $e');
-    }
   }
 
   _showSnackbar(String message) {
