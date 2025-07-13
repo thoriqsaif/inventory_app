@@ -123,7 +123,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          NavigationRoutes.register.name,
+                          NavigationsRoutes.register,
                         );
                       },
                       child: Text('Daftar'),

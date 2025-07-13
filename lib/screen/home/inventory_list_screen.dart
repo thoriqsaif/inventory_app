@@ -70,8 +70,8 @@ class _StreamInventoryListState extends State<StreamInventoryList> {
                   icon: const Icon(Icons.add),
                   onPressed: () => Navigator.pushNamed(
                     context,
-                    NavigationRoutes.addInventory as String,
-                    arguments: data.id,
+                    NavigationsRoutes.detailInventory,
+                    arguments: item,
                   ),
                 ),
               );
@@ -79,13 +79,11 @@ class _StreamInventoryListState extends State<StreamInventoryList> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(
-          context,
-          NavigationRoutes.addInventory as String,
-        ),
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () =>
+      //       Navigator.pushNamed(context, NavigationsRoutes.addInventory),
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

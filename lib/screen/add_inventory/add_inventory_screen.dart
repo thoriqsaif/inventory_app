@@ -5,7 +5,11 @@ import 'package:inventory_app/data/db/firestore/firestore_service.dart';
 
 class AddInventoryPage extends StatefulWidget {
   final int inventoryId;
-  const AddInventoryPage({super.key, required this.inventoryId});
+  const AddInventoryPage(
+    Set<dynamic> set, {
+    super.key,
+    required this.inventoryId,
+  });
 
   @override
   State<AddInventoryPage> createState() => _AddInventoryPageState();
