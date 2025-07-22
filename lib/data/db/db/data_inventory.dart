@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'data_inventory.g.dart';
+// part 'data_inventory.g.dart';
 
 @HiveType(typeId: 1)
 class DataInventory {
